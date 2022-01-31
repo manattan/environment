@@ -2,10 +2,25 @@ alias gp="git push"
 alias tr="tree ."
 alias zsh="vi ~/.zshrc"
 alias db="mysql -u root"
-
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH="/Users/motegitakanori/Library/Python/3.8/bin"
+export PATH="$HOME/go/bin:$PATH"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin":$PATH
+fpath=(~/.zsh $fpath)
 fpath+=$HOME/.zsh/pure
-autoload -U promptinit; promptinit
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+
+plugins=(… zsh-completions)
+autoload -U compinit
+compinit
+
+# 補完をハイライトする
+zstyle ':completion:*:default' menu select=2
+
+autoload -U promptinit
+promptinit
+prompt pure
 PURE_PROMPT_SYMBOL='✈️ '
 PURE_GIT_DOWN_ARROW='👇'
 PURE_GIT_UP_ARROW='👆'
@@ -17,46 +32,21 @@ zstyle :prompt:pure:host show yes
 zstyle :prompt:pure:path color white
 zstyle :prompt:pure:git:branch color cyan
 zstyle :prompt:pure:git:execution_time show yes
-prompt pure
 
-function conda(){
-    unset -f conda
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/user/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/user/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/user/anaconda3/etc/profile.d/conda.sh"
+# pecoを使って history 検索
+function peco-select-history() {
+    local tac
+    if which tac > /dev/null; then
+        tac="tac"
     else
-        export PATH="/home/user/anaconda3/bin:$PATH"
+        tac="tail -r"
     fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+    BUFFER=$(\history -n 1 | \
+        eval $tac | \
+        peco --query "$LBUFFER")
+    CURSOR=$#BUFFER
+    zle clear-screen
 }
-
-
-# pathを通す
-export PATH="/Users/takanori/.rbenv/shims:/usr/bin:$PATH"
-
-# homebrewのopensslを用いる
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
-
-export PATH="/Users/takanori/.asdf/installs/erlang/20.1/bin/:$PATH"
-export PATH="/Users/takanori/.asdf/installs/elixir/1.8.1/bin/:$PATH"
-
-fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-
-autoload -U compinit
-compinit -u
-
-export PATH="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home/bin:$PATH"
-export PATH="/Users/takanori/Library/Python/3.8/bin:$PATH"
-
-export PATH="$HOME/go/bin:$PATH"
-
-fpath=(~/.zsh $fpath)
-autoload -Uz compinit
-compinit -u
+zle -N peco-select-history
+bindkey '^r' peco-select-history
+export PATH=$HOME/.nodebrew/current/bin:$PATH
