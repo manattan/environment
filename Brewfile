@@ -57,5 +57,3 @@ cask "sequel-pro"
 cask "zoom"
 cask "vagrant"
 mas "LINE", id: 539883307
-mas "Twitter", id: 409789998
-mas "Xcode", id: 497799835
