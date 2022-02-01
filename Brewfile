@@ -58,4 +58,5 @@ cask "zoom"
 cask "vagrant"
 cask "google-chrome"
 cask "brave-browser"
+cask "docker"
 mas "LINE", id: 539883307
