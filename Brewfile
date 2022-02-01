@@ -56,4 +56,6 @@ cask "ngrok"
 cask "sequel-pro"
 cask "zoom"
 cask "vagrant"
+cask "google-chrome"
+cask "brave-browser"
 mas "LINE", id: 539883307
