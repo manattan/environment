@@ -60,3 +60,7 @@ cask "google-chrome"
 cask "brave-browser"
 cask "docker"
 mas "LINE", id: 539883307
+
+// 2022-04-06
+brew "fig"
+cask "karabiner-elements"
